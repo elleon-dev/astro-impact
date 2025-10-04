@@ -1,0 +1,614 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:o="urn:schemas-microsoft-com:office:office"
+  xmlns:v="urn:schemas-microsoft-com:vml"
+  lang="en"
+>
+  <!--- HEAD PARTIAL --->
+  {{> headPartial}}
+
+  <body>
+    <table
+      border="0"
+      cellpadding="0"
+      cellspacing="0"
+      class="nl-container"
+      role="presentation"
+      style="
+        mso-table-lspace: 0pt;
+        mso-table-rspace: 0pt;
+        background-color: #ffffff;
+      "
+      width="100%"
+    >
+      <tbody>
+        <tr>
+          <td>
+            <!--HEADER-->
+            <table
+              align="center"
+              border="0"
+              cellpadding="0"
+              cellspacing="0"
+              class="row-content stack"
+              role="presentation"
+              style="
+                mso-table-lspace: 0pt;
+                mso-table-rspace: 0pt;
+                background-color: #d50f86;
+                color: #fff;
+              "
+              width="600"
+            >
+              <tbody>
+                <tr>
+                  <th
+                    class="column"
+                    style="
+                      mso-table-lspace: 0pt;
+                      mso-table-rspace: 0pt;
+                      font-weight: 400;
+                      text-align: left;
+                      vertical-align: top;
+                      padding-top: 5px;
+                      padding-bottom: 5px;
+                      border-top: 0px;
+                      border-right: 0px;
+                      border-bottom: 0px;
+                      border-left: 0px;
+                    "
+                    width="100%"
+                  >
+                    <table
+                      border="0"
+                      cellpadding="20"
+                      cellspacing="0"
+                      class="image_block"
+                      role="presentation"
+                      style="mso-table-lspace: 0pt; mso-table-rspace: 0pt"
+                      width="100%"
+                    >
+                      <tr>
+                        <td
+                          style="
+                            text-align: center;
+                            width: 100%;
+                            padding: 13px 25px;
+                          "
+                        >
+                          <div align="left">
+                            <img
+                              height="50"
+                              src="https://storage.googleapis.com/triphub-375615.appspot.com/resources/logo-rmt.png"
+                              alt="Rainbow mountain travels logo"
+                            />
+                          </div>
+                        </td>
+                      </tr>
+                    </table>
+                  </th>
+                </tr>
+              </tbody>
+            </table>
+
+            <!--- Email title --->
+            {{> bookingConfirmedTitlePartial}}
+
+            <!---DIVIDER--->
+            {{> dividerPartial}}
+
+            <table
+              align="center"
+              border="0"
+              cellpadding="0"
+              cellspacing="0"
+              class="row-content stack"
+              role="presentation"
+              style="mso-table-lspace: 0pt; mso-table-rspace: 0pt"
+              width="600"
+            >
+              <tbody>
+                <tr>
+                  <td
+                    style="
+                      display: flex;
+                      align-items: center;
+                      padding: 25px;
+                      font-size: 25px;
+                    "
+                  >
+                    <div class="item-left">
+                      <img
+                        width="260"
+                        height="180"
+                        src="{{tour.photo}}"
+                        alt="tour img"
+                        style="object-fit: cover; border-radius: 10px"
+                      />
+                    </div>
+                    <div
+                      class="item-right"
+                      style="
+                        width: 100%;
+                        font-size: 18px;
+                        text-align: left;
+                        padding: 10px 10px 10px 20px;
+                      "
+                    >
+                      <div style="margin: auto">
+                        <div>
+                          <ul
+                            style="display: block; gap: 5px; margin-bottom: 5px"
+                          >
+                            <li style="font-size: 15px; font-weight: 600">
+                              {{startDate}}
+                            </li>
+                            <li><strong>{{tour.name}}</strong></li>
+                          </ul>
+                        </div>
+                        <div>
+                          <ul style="display: block; gap: 5px">
+                            <li>
+                              {{translation.travelers}}: {{adultAge.quantity}}
+                              {{translation.adult}}
+                            </li>
+                            <li>
+                              {{translation.tour_price}}: {{currency}}
+                              {{adultAge.unitPrice}}
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
+            <!---DIVIDER--->
+            {{> dividerPartial}}
+
+            <table
+              align="center"
+              border="0"
+              cellpadding="0"
+              cellspacing="0"
+              class="row-content stack"
+              role="presentation"
+              style="mso-table-lspace: 0pt; mso-table-rspace: 0pt"
+              width="600"
+            >
+              <tbody>
+                <tr>
+                  <td
+                    style="
+                      display: flex;
+                      align-items: center;
+                      padding: 25px;
+                      font-size: 25px;
+                    "
+                  >
+                    <div
+                      class="item-right"
+                      style="font-size: 18px; text-align: left"
+                    >
+                      <div><h2>{{translation.reservation_details}}</h2></div>
+                      <div>
+                        {{translation.booking_reference}}:
+                        <strong>{{purchaseNumber}}</strong>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td
+                    style="
+                      display: flex;
+                      align-items: center;
+                      justify-content: space-between;
+                      padding: 13px 25px;
+                      font-size: 25px;
+                    "
+                  >
+                    <div
+                      class="item"
+                      style="font-size: 18px; text-align: left; width: 240px"
+                    >
+                      <div style="margin-bottom: 7px">
+                        {{translation.travel_date}}:
+                      </div>
+                      <div><strong>{{startDate}}</strong></div>
+                    </div>
+                    <div
+                      class="item"
+                      style="font-size: 18px; text-align: left; width: 240px"
+                    >
+                      <div style="margin-bottom: 7px">
+                        {{translation.lead_traveler_name}}:
+                      </div>
+                      <div><strong>{{contact.name}}</strong></div>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td
+                    style="
+                      display: flex;
+                      align-items: center;
+                      justify-content: space-between;
+                      padding: 13px 25px;
+                      font-size: 25px;
+                    "
+                  >
+                    <div
+                      class="item"
+                      style="font-size: 18px; text-align: left; width: 240px"
+                    >
+                      <div style="margin-bottom: 7px">
+                        {{translation.travellers}}:
+                      </div>
+                      <div><strong>{{adultAge.quantity}}</strong></div>
+                    </div>
+                    <div
+                      class="item"
+                      style="font-size: 18px; text-align: left; width: 240px"
+                    >
+                      <div style="margin-bottom: 7px">
+                        {{translation.pick_up_time}}:
+                      </div>
+                      <div><strong>{{pickup.time}}</strong></div>
+                    </div>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td
+                    style="
+                      display: flex;
+                      align-items: center;
+                      justify-content: space-between;
+                      padding: 13px 25px;
+                      font-size: 25px;
+                    "
+                  >
+                    <div
+                      class="item"
+                      style="font-size: 18px; text-align: left; width: 500px"
+                    >
+                      <div style="margin-bottom: 7px">
+                        {{translation.hotel_pickup}}:
+                      </div>
+                      <div>
+                        {{#pickup.type}}
+                        <strong>{{pickup.name}}</strong>
+                        {{/pickup.type}} {{#decideLater.type}}
+                        <p>
+                          {{translation.don_t_forget_to_give_us_your_pickup_location}}
+                          {{tour.cityName}}
+                          {{translation.by_clicking_this_link}}
+                          <a
+                            href="{{decideLater.linkPickupLocation}}"
+                            target="_blank"
+                            >{{decideLater.linkPickupLocation}}</a
+                          >
+                        </p>
+                        {{/decideLater.type}}
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
+            <table
+              align="center"
+              border="0"
+              cellpadding="0"
+              cellspacing="0"
+              class="row row-1"
+              role="presentation"
+              style="mso-table-lspace: 0pt; mso-table-rspace: 0pt"
+              width="100%"
+            >
+              <tbody>
+                <tr>
+                  <td style="padding: 25px 25px 0 25px">
+                    <table
+                      align="center"
+                      border="0"
+                      cellpadding="0"
+                      cellspacing="0"
+                      class="row-content stack"
+                      role="presentation"
+                      style="
+                        mso-table-lspace: 0pt;
+                        mso-table-rspace: 0pt;
+                        background-color: #ffefef;
+                        color: #000;
+                      "
+                      width="600"
+                    >
+                      <tbody>
+                        <tr>
+                          <th
+                            class="column"
+                            style="
+                              mso-table-lspace: 0pt;
+                              mso-table-rspace: 0pt;
+                              font-weight: 400;
+                              text-align: left;
+                              vertical-align: top;
+                              padding-top: 5px;
+                              padding-bottom: 5px;
+                              border-top: 0px;
+                              border-right: 0px;
+                              border-bottom: 0px;
+                              border-left: 0px;
+                            "
+                            width="100%"
+                          >
+                            <table
+                              border="0"
+                              cellpadding="20"
+                              cellspacing="0"
+                              class="image_block"
+                              role="presentation"
+                              style="
+                                mso-table-lspace: 0pt;
+                                mso-table-rspace: 0pt;
+                              "
+                              width="100%"
+                            >
+                              <tr>
+                                <td>
+                                  <div
+                                    align="justify"
+                                    style="text-align: justify; font-size: 18px"
+                                  >
+                                    <p>
+                                      {{translation.emergency_phone}}: +51 936
+                                      047 334 ({{translation.emergencies_only}})
+                                    </p>
+                                    <p>
+                                      {{translation.email_address}}:
+                                      bookings@rainbowmountaintravels.com
+                                    </p>
+                                  </div>
+                                </td>
+                              </tr>
+                            </table>
+                          </th>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
+            <!-- IMPORTANT NOTES -->
+            {{> tourNotesPartial}}
+
+            <table
+              align="center"
+              border="0"
+              cellpadding="0"
+              cellspacing="0"
+              class="row row-1"
+              role="presentation"
+              style="mso-table-lspace: 0pt; mso-table-rspace: 0pt"
+              width="100%"
+            >
+              <tbody>
+                <tr>
+                  <td>
+                    <table
+                      align="center"
+                      border="0"
+                      cellpadding="0"
+                      cellspacing="0"
+                      class="row-content stack"
+                      role="presentation"
+                      style="
+                        mso-table-lspace: 0pt;
+                        mso-table-rspace: 0pt;
+                        background-color: #f6f6f6;
+                        color: #000;
+                      "
+                      width="600"
+                    >
+                      <tbody>
+                        <tr>
+                          <th
+                            class="column"
+                            style="
+                              mso-table-lspace: 0pt;
+                              mso-table-rspace: 0pt;
+                              font-weight: 400;
+                              text-align: left;
+                              vertical-align: top;
+                              padding-top: 5px;
+                              padding-bottom: 5px;
+                              border-top: 0px;
+                              border-right: 0px;
+                              border-bottom: 0px;
+                              border-left: 0px;
+                            "
+                            width="100%"
+                          >
+                            <table
+                              border="0"
+                              cellpadding="20"
+                              cellspacing="0"
+                              class="image_block"
+                              role="presentation"
+                              style="
+                                mso-table-lspace: 0pt;
+                                mso-table-rspace: 0pt;
+                              "
+                              width="100%"
+                            >
+                              <tr>
+                                <td>
+                                  <div
+                                    align="justify"
+                                    style="text-align: justify; font-size: 18px"
+                                  >
+                                    <div>
+                                      <h2>
+                                        {{translation.recommendations_and_tips}}
+                                      </h2>
+                                    </div>
+                                    <strong
+                                      >{{translation.what_to_bring}}</strong
+                                    >
+                                    <ul
+                                      style="
+                                        list-style: inside;
+                                        padding: 0 20px;
+                                        margin: 20px auto;
+                                        display: grid;
+                                        gap: 10px;
+                                      "
+                                    >
+                                      <li>{{translation.small_backpack}}</li>
+                                      <li>
+                                        {{translation.toilet_paper_and_hand_sanitizer}}
+                                      </li>
+                                      <li>
+                                        {{translation.waterproof_wind_resistant_jacket}}
+                                      </li>
+                                      <li>
+                                        {{translation.lightweight_warm_clothing_to_layer}}
+                                      </li>
+                                      <li>
+                                        {{translation.sunscreen_lip_balm}}
+                                      </li>
+                                      <li>
+                                        {{translation.appropriate_footwear}}
+                                      </li>
+                                      <li>{{translation.hat_sunglasses}}</li>
+                                      <li>{{translation.trekking_poles}}</li>
+                                      <li>{{translation.water_snacks}}</li>
+                                      <li>{{translation.money_for_extras}}</li>
+                                      <li>
+                                        {{translation.warm_water_proof_gloves}}
+                                      </li>
+                                    </ul>
+                                  </div>
+                                </td>
+                              </tr>
+                            </table>
+                          </th>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
+            <!-- PAYMENT SUMMARY -->
+            {{> paymentSummaryPartial}}
+
+            <!-- OUR TRUSTED PARTNERS -->
+            {{> ourTrustedPartnersPartial}}
+
+            <!-- Cancellation policies -->
+            {{> cancellationPoliciesPartial}}
+
+            <!--FOOTER-->
+            <table
+              align="center"
+              border="0"
+              cellpadding="0"
+              cellspacing="0"
+              class="row row-1"
+              role="presentation"
+              style="mso-table-lspace: 0pt; mso-table-rspace: 0pt"
+              width="100%"
+            >
+              <tbody>
+                <tr>
+                  <td>
+                    <table
+                      align="center"
+                      border="0"
+                      cellpadding="0"
+                      cellspacing="0"
+                      class="row-content stack"
+                      role="presentation"
+                      style="
+                        mso-table-lspace: 0pt;
+                        mso-table-rspace: 0pt;
+                        background-color: #000000;
+                        color: #999999;
+                      "
+                      width="600"
+                    >
+                      <tbody>
+                        <tr>
+                          <th
+                            class="column"
+                            style="
+                              mso-table-lspace: 0pt;
+                              mso-table-rspace: 0pt;
+                              font-weight: 400;
+                              text-align: left;
+                              vertical-align: top;
+                              padding-top: 5px;
+                              padding-bottom: 5px;
+                              border-top: 0px;
+                              border-right: 0px;
+                              border-bottom: 0px;
+                              border-left: 0px;
+                            "
+                            width="100%"
+                          >
+                            <table
+                              border="0"
+                              cellpadding="20"
+                              cellspacing="0"
+                              class="image_block"
+                              role="presentation"
+                              style="
+                                mso-table-lspace: 0pt;
+                                mso-table-rspace: 0pt;
+                              "
+                              width="100%"
+                            >
+                              <tr>
+                                <td>
+                                  <div
+                                    align="left"
+                                    style="
+                                      font-size: 15px;
+                                      text-align: left;
+                                      padding: 1em 0 0 0;
+                                    "
+                                  >
+                                    © 2023 Rainbow Mountain Travels.
+                                    {{translation.all_rights_reserved}}.
+                                  </div>
+                                  <div align="left" style="text-align: left">
+                                    <p>{{translation.footer_description}}</p>
+                                  </div>
+                                </td>
+                              </tr>
+                            </table>
+                          </th>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <!-- End -->
+  </body>
+</html>

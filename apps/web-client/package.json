@@ -1,0 +1,36 @@
+{
+  "name": "astro-impact",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --turbopack",
+    "build": "next build --turbopack",
+    "start": "next start",
+    "lint": "eslint",
+    "deploy": "firebase deploy --only hosting:app",
+    "deploy:hosting": "yarn build && firebase deploy --only hosting:app",
+    "deploy:hosting-api": "yarn build && firebase deploy --only api",
+    "deploy:indexes": "firebase deploy --only firestore:indexes",
+    "deploy:functions": "firebase deploy --only ../functions",
+    "deploy:api": "firebase deploy --only functions:api",
+    "firebase:emulators": "firebase emulators:start",
+    "eslint:check": "eslint src",
+    "type:check": "tsc --noEmit",
+    "prettier:check": "prettier . --check",
+    "prettier:write": "prettier . --write",
+    "jest:test": "jest"
+  },
+  "dependencies": {
+    "next": "15.5.4",
+    "react": "19.1.0",
+    "react-dom": "19.1.0"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3",
+    "@tailwindcss/postcss": "^4",
+    "eslint": "^9",
+    "eslint-config-next": "15.5.4",
+    "prettier": "^3.6.2",
+    "tailwindcss": "^4"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "projects": {
+    "default": "astro-impact"
+  },
+  "targets": {
+    "astro-impact": {
+      "hosting": {
+        "app": [
+          "astro-impact"
+        ],
+        "api": [
+          "api-astro-impact"
+        ]
+      }
+    }
+  }
+}
