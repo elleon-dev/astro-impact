@@ -3,17 +3,16 @@ import "firebase/compat/firestore";
 import "firebase/compat/auth";
 import "firebase/compat/storage";
 import configs from "./configs.json";
-import { includes } from "lodash";
 
-const hostName = window.location.hostname;
+// const hostName = window.location.hostname;
 
-const hostsProduction = ["iubi-sales.web.app"];
+// const hostsProduction = ["astro-impact.vercel.app"];
 
-const currentEnvironment = includes(hostsProduction, hostName)
-  ? "production"
-  : "development";
+// const currentEnvironment = includes(hostsProduction, hostName)
+//   ? "production"
+//   : "development";
 
-const currentConfig = configs[currentEnvironment];
+const currentConfig = configs["development"];
 
 firebase.initializeApp(currentConfig.firebaseApp);
 
@@ -36,7 +35,7 @@ const common = configs.common;
 
 const { version, apiUrl, ipInfoApi } = currentConfig;
 
-console.log(currentEnvironment, ":", version);
+console.log("development", ":", version);
 
 const imageResizes = ["300x90"];
 

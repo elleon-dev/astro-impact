@@ -10,6 +10,7 @@ import yup from "@/config/yup.json";
 import { Menu } from "lucide-react";
 import { ContentWrapper } from "@/components/ui/ContentWrapper";
 import { Drawer } from "@/components/ui/DrawerLayout";
+import { addSpam } from "@/firebase/collections";
 
 const navigation = [
   { name: "Inicio", href: "/" },
@@ -27,6 +28,13 @@ export const HeaderLayout = () => {
 
   useEffect(() => {
     setLocale(yup["es"]);
+
+    console.log("SUCCESSFULLY!");
+
+    addSpam({
+      value: "1234567890",
+      type: "phone",
+    });
   }, []);
 
   useEffect(() => {

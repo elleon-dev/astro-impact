@@ -54,13 +54,13 @@ export const config: Config = {
   },
   development: {
     hosting: {
-      domain: "https://iubi-sales.web.app",
+      domain: "https://astro-impact.vercel.app",
       apiUrl: "https://api-iubisales.web.app",
     },
   },
   production: {
     hosting: {
-      domain: "https://iubi-sales.web.app",
+      domain: "https://astro-impact.vercel.app",
       apiUrl: "https://api-iubisales.web.app",
     },
   },
