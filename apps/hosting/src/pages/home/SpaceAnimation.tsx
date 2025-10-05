@@ -3,6 +3,7 @@ import * as THREE from "three";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {Object3D} from "three";
+// @ts-ignore
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import {Route, Routes} from "react-router-dom";
-import Home from "@/pages/Home.tsx";
+import Home from "@/pages/home";
 import Simulator from "@/pages/Simulator.tsx";
 import Results from "@/pages/Results.tsx";
 import NotFound from "@/pages/NotFound.tsx";
