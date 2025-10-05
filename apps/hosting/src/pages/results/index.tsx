@@ -1,7 +1,7 @@
 import {useLocation} from "react-router-dom";
-import {Button} from "@/components/ui/button";
-import {Input} from "@/components/ui/input";
-import {Label} from "@/components/ui/label";
+import {Button} from "@/components/ui/button.tsx";
+import {Input} from "@/components/ui/input.tsx";
+import {Label} from "@/components/ui/label.tsx";
 import {useEffect, useState} from "react";
 import {
     AlertTriangle,
@@ -18,13 +18,13 @@ import {
     Twitter,
     Users
 } from "lucide-react";
-import {ImpactVideo} from "@/components/ImpactVideo";
-import {Impact3DModel} from "@/components/Impact3DModel";
+import {ImpactVideo} from "@/components/ImpactVideo.tsx";
+import {Impact3DModel} from "@/components/Impact3DModel.tsx";
 import {toast} from "sonner";
 
 type Phase = "3d" | "video" | "results";
 
-const Results = () => {
+export const ResultsPage = () => {
   const location = useLocation();
   const { simData } = location.state || {};
   const [userName, setUserName] = useState("");
@@ -445,5 +445,3 @@ const Results = () => {
     </div>
   );
 };
-
-export default Results;

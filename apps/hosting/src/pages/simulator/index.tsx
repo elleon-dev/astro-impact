@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Slider } from "@/components/ui/slider";
-import { AsteroidScene } from "@/components/AsteroidScene";
+import { Button } from "@/components/ui/button.tsx";
+import { Card } from "@/components/ui/card.tsx";
+import { Label } from "@/components/ui/label.tsx";
+import { Input } from "@/components/ui/input.tsx";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select.tsx";
+import { Slider } from "@/components/ui/slider.tsx";
+import { AsteroidScene } from "@/components/AsteroidScene.tsx";
 import { Rocket, Flame, Gauge, Target, Ruler, Palette, Zap, MapPin } from "lucide-react";
 
 interface SimulationData {
@@ -17,7 +17,7 @@ interface SimulationData {
   composition: string;
 }
 
-const Simulator = () => {
+export const SimulatorPage = () => {
   const navigate = useNavigate();
   const [userName, setUserName] = useState("");
   const [simData, setSimData] = useState<SimulationData>({
@@ -263,5 +263,3 @@ const Simulator = () => {
     </div>
   );
 };
-
-export default Simulator;
