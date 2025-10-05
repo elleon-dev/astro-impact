@@ -27,7 +27,7 @@ const Earth = () => {
   return (
     <Sphere ref={earthRef} args={[2, 64, 64]} position={[0, 0, 0]}>
       <meshStandardMaterial
-        color="#112237"
+        color="#61dafb"
         roughness={0.7}
         metalness={0.2}
       />
@@ -46,7 +46,7 @@ const Asteroid = ({ simData }: { simData: SimulationData }) => {
       case "icy":
         return "#b0d4e3";
       default:
-        return "#6b4423";
+        return "#ef852d";
     }
   }, [simData.asteroidType]);
 

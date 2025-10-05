@@ -1,12 +1,9 @@
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Index from "./pages/home";
-import Simulator from "./pages/Simulator";
-import Results from "./pages/Results";
-import NotFound from "./pages/NotFound";
+import {Toaster} from "@/components/ui/toaster";
+import {Toaster as Sonner} from "@/components/ui/sonner";
+import {TooltipProvider} from "@/components/ui/tooltip";
+import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
+import {BrowserRouter} from "react-router-dom";
+import {Router} from "@/router";
 
 const queryClient = new QueryClient();
 
@@ -16,12 +13,7 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/start" element={<Simulator />} />
-          <Route path="/results" element={<Results />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+            <Router/>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
