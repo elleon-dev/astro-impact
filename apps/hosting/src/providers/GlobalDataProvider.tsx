@@ -4,6 +4,7 @@ import { firestore } from "@/firebase";
 import { orderBy } from "lodash";
 import { LoaderIcon } from "lucide-react";
 import { spamsRef } from "@/firebase/collections";
+import { Loader } from "@/components/ui/loader.tsx";
 
 interface Context {
   users: User[];
@@ -37,7 +38,7 @@ export const GlobalDataProvider = ({ children }) => {
     error && alert({ type: "error" });
   }, [error]);
 
-  if (loading) return <LoaderIcon height="100vh" className="animate-spin" />;
+  if (loading) return <Loader />;
 
   return (
     <GlobalDataContext.Provider
