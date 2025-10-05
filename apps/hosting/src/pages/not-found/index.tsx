@@ -1,10 +1,10 @@
 import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button.tsx";
+import { Card } from "@/components/ui/card.tsx";
 import { AlertTriangle, Home } from "lucide-react";
 
-const NotFound = () => {
+export const NotFoundPage = () => {
   const location = useLocation();
 
   useEffect(() => {
@@ -32,14 +32,12 @@ const NotFound = () => {
               Lo sentimos, la página que buscas no existe o ha sido movida.
             </p>
           </div>
-          
           <div className="text-xs sm:text-sm text-muted-foreground bg-muted/10 rounded-lg p-3 sm:p-4">
             <p className="font-mono break-all">
               Ruta intentada: <span className="text-destructive">{location.pathname}</span>
             </p>
           </div>
         </div>
-
         <div className="space-y-3">
           <Button
             onClick={() => window.location.href = "/"}
@@ -64,4 +62,3 @@ const NotFound = () => {
   );
 };
 
-export default NotFound;
