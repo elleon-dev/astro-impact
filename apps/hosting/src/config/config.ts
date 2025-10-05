@@ -8,6 +8,7 @@ interface ConfigEnvironment {
   firebaseApp: FirebaseApp;
   buckets: Buckets;
   apiUrl: string;
+  hostingUrl: string;
 }
 
 interface FirebaseApp {
@@ -42,6 +43,7 @@ export const config: Config = {
       publicUrl: "-",
     },
     apiUrl: "https://api-astro-impact.web.app",
+    hostingUrl: "https://astro-impact.vercel.app",
   },
   production: {
     version: "0.0.1",
@@ -59,5 +61,6 @@ export const config: Config = {
       publicUrl: "-",
     },
     apiUrl: "https://api-astro-impact.web.app",
+    hostingUrl: "https://astro-impact.vercel.app",
   },
 };
