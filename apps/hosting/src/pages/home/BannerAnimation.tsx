@@ -14,7 +14,7 @@ export const BannerAnimation = () => {
     });
 
     _timeLine
-      .to("#banner-key", { scale: 1, duration: 0.2 })
+      .to("#astro-impact", { scale: 1, duration: 0.2 })
       .to("#astro-impact", { opacity: 0, duration: 0.1 }, "<");
   }, []);
 
@@ -31,7 +31,7 @@ export const BannerAnimation = () => {
         height={1000}
         className="scale-125 absolute max-w-6xl object-cover mt-10"
       />
-      <SpaceAnimation/>
+      <SpaceAnimation />
     </section>
   );
 };

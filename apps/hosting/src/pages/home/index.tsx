@@ -35,35 +35,7 @@ const Home = () => {
                   <Rocket className="w-4 h-4 sm:w-5 sm:h-5" />
                   Iniciar Simulación
               </Button>
-          </div>          <div className="min-h-screen bg-background flex items-center justify-center p-4 sm:p-6">
-          <Button
-              onClick={handleStartSimulation}
-              size="lg"
-              className="w-full gap-2 shadow-lg hover:shadow-xl transition-all duration-300 text-sm sm:text-base"
-          >
-              <Rocket className="w-4 h-4 sm:w-5 sm:h-5" />
-              Iniciar Simulación
-          </Button>
-      </div>          <div className="min-h-screen bg-background flex items-center justify-center p-4 sm:p-6">
-          <Button
-              onClick={handleStartSimulation}
-              size="lg"
-              className="w-full gap-2 shadow-lg hover:shadow-xl transition-all duration-300 text-sm sm:text-base"
-          >
-              <Rocket className="w-4 h-4 sm:w-5 sm:h-5" />
-              Iniciar Simulación
-          </Button>
-      </div>          <div className="min-h-screen bg-background flex items-center justify-center p-4 sm:p-6">
-          <Button
-              onClick={handleStartSimulation}
-              size="lg"
-              className="w-full gap-2 shadow-lg hover:shadow-xl transition-all duration-300 text-sm sm:text-base"
-          >
-              <Rocket className="w-4 h-4 sm:w-5 sm:h-5" />
-              Iniciar Simulación
-          </Button>
-      </div>
-
+          </div>
       </>
 
   );

@@ -1,17 +1,17 @@
 import React, { useEffect, useRef } from "react";
-import * as THREE from "three";
+import * as THREE from "three/webgpu";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import {Object3D} from "three";
+import { Object3D } from "three";
 // @ts-ignore
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 
-
 export const SpaceAnimation = () => {
-
-  const mountRef = useRef(null);
-  const asteroidRef = useRef(null);
-  const earthRef = useRef(null);
+  const mountRef = useRef<HTMLDivElement | null>(null);
+  const asteroidRef = useRef<Object3D | null>(null);
+  const earthRef = useRef<THREE.Mesh | null>(null);
+  const cloudsRef = useRef<THREE.Mesh | null>(null);
+  const atmosphereRef = useRef<THREE.Mesh | null>(null);
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
@@ -32,22 +32,30 @@ export const SpaceAnimation = () => {
       mountRef.current.appendChild(renderer.domElement);
     }
 
+    const sun = new THREE.DirectionalLight("#ffffff", 2);
+    sun.position.set(0, 0, 3);
+    scene.add(sun);
+
     const textureLoader = new THREE.TextureLoader();
-    const earthDay = textureLoader.load("/textures/planet/earth_day_4096.jpg");
+    const earthDay = textureLoader.load("/textures/planet/8k_earth_daymap.jpg");
     const earthNight = textureLoader.load(
-      "/textures/planet/earth_night_4096.jpg",
+      "/textures/planet/8k_earth_nightmap.jpg",
     );
     const earthBump = textureLoader.load(
       "/textures/planet/earth_bump_roughness_clouds_4096.jpg",
     );
     const earthNormal = textureLoader.load(
-      "/textures/planet/earth_normal_2048.jpg",
+      "/textures/planet/8k_earth_normal_map.tif",
     );
     const earthClouds = textureLoader.load(
-      "/textures/planet/earth_clouds_1024.png",
+      "/textures/planet/8k_earth_clouds.jpg",
     );
     const earthLights = textureLoader.load(
       "/textures/planet/earth_lights_2048.png",
+    );
+
+    const earthSpecular = textureLoader.load(
+      "/textures/planet/8k_earth_specular_map.tif",
     );
 
     const earthMaterial = new THREE.MeshStandardMaterial({
@@ -55,11 +63,12 @@ export const SpaceAnimation = () => {
       bumpMap: earthBump,
       bumpScale: 0.08,
       normalMap: earthNormal,
-      roughness: 0.7,
+      roughness: earthClouds,
       metalness: 0.1,
       emissive: new THREE.Color(0x222244),
       emissiveMap: earthNight,
       emissiveIntensity: 0.7,
+      specularMap: earthSpecular,
     });
 
     const geometry = new THREE.SphereGeometry(3, 128, 128);
@@ -79,19 +88,26 @@ export const SpaceAnimation = () => {
     });
     const clouds = new THREE.Mesh(cloudsGeometry, cloudsMaterial);
     clouds.position.copy(earth.position);
+    cloudsRef.current = clouds;
     scene.add(clouds);
 
-    // Atmósfera (opcional, visual extra)
-    const atmosphereGeometry = new THREE.SphereGeometry(3.1, 128, 128);
+    // Atmósfera (más difuminada y con textura)
+    const atmosphereTexture = textureLoader.load(
+      "/textures/planet/earth_atmos_2048.jpg",
+    );
+    const atmosphereGeometry = new THREE.SphereGeometry(0.5, 128, 128); // un poco más grande
     const atmosphereMaterial = new THREE.MeshPhongMaterial({
+      map: atmosphereTexture,
       color: 0x3399ff,
       transparent: true,
-      opacity: 0.15,
+      opacity: 0.07,
       side: THREE.DoubleSide,
       depthWrite: false,
+      blending: THREE.AdditiveBlending,
     });
     const atmosphere = new THREE.Mesh(atmosphereGeometry, atmosphereMaterial);
     atmosphere.position.copy(earth.position);
+    atmosphereRef.current = atmosphere;
     scene.add(atmosphere);
 
     // Asteroide
@@ -115,9 +131,9 @@ export const SpaceAnimation = () => {
         // Posición inicial: al fondo, arriba a la derecha
         asteroid.position.set(0, 30, -100);
         asteroid.rotation.set(0, 0, 0);
-        asteroid.traverse(({isObject3D,customDistanceMaterial}) => {
-          if (isObject3D) {
-              customDistanceMaterial = new THREE.MeshStandardMaterial({
+        asteroid.traverse((child: any) => {
+          if (child.isMesh) {
+            child.material = new THREE.MeshStandardMaterial({
               map: baseColor,
               normalMap: normalMap,
               metalnessMap: metallicRoughness,
@@ -127,15 +143,15 @@ export const SpaceAnimation = () => {
             });
           }
         });
-        scene.add(asteroid!);
+        scene.add(asteroid);
         asteroidRef.current = asteroid;
         // Inicia animaciones GSAP cuando el asteroide está cargado
         setupGSAP();
       },
       undefined,
       (error) => {
-        console.error('Error cargando el modelo GLTF:', error);
-      }
+        console.error("Error cargando el modelo GLTF:", error);
+      },
     );
 
     // Luces para el asteroide
@@ -148,12 +164,25 @@ export const SpaceAnimation = () => {
     // Animación
     let frameId: number;
     const animate = () => {
-      // Rotación continua de la tierra
-      if (earthRef.current && 'rotation' in earthRef.current && earthRef.current.rotation) {
+      // Sincroniza posición y rotación de nubes y atmósfera con la tierra
+      if (earthRef.current) {
+        if (cloudsRef.current) {
+          cloudsRef.current.position.copy(earthRef.current.position);
+          cloudsRef.current.rotation.copy(earthRef.current.rotation);
+        }
+        if (atmosphereRef.current) {
+          atmosphereRef.current.position.copy(earthRef.current.position);
+          atmosphereRef.current.rotation.copy(earthRef.current.rotation);
+        }
+        // Rotación continua de la tierra
         earthRef.current.rotation.y += 0.00005;
       }
       // Animación simple de rotación del asteroide
-      if (asteroidRef.current && 'rotation' in asteroidRef.current && asteroidRef.current.rotation) {
+      if (
+        asteroidRef.current &&
+        "rotation" in asteroidRef.current &&
+        asteroidRef.current.rotation
+      ) {
         asteroidRef.current.rotation.y += 0.01;
         asteroidRef.current.rotation.x += 0.005;
       }
@@ -173,22 +202,26 @@ export const SpaceAnimation = () => {
           scrub: 10,
         },
       });
-      // Tierra: igual que antes
-      if ('position' in earthRef.current && 'rotation' in earthRef.current) {
-        tl.to(earthRef.current.position, {
-          x: 0,
-          z: 3,
-        })
-          .to(
-            earthRef.current.rotation,
-            {
-              y: Math.PI * 0.2,
-            },
-            "<",
-          );
+      // Tierra, nubes y atmósfera: SIEMPRE sincronizadas
+      if (
+        earthRef.current &&
+        cloudsRef.current &&
+        atmosphereRef.current &&
+        "position" in earthRef.current &&
+        "rotation" in earthRef.current
+      ) {
+        tl.to(earthRef.current.position, { x: 0, y: -4, z: 4 })
+          .to(earthRef.current.rotation, { y: Math.PI * 0.2 }, "<")
+          .to(cloudsRef.current.position, { x: 0, y: -4, z: 4 }, "<")
+          .to(cloudsRef.current.rotation, { y: Math.PI * 0.2 }, "<")
+          .to(atmosphereRef.current.position, { x: 0, y: -4, z: 4 }, "<")
+          .to(atmosphereRef.current.rotation, { y: Math.PI * 0.2 }, "<");
       }
-      // Asteroide: se mueve al lado contrario y se acerca
-      if ('position' in asteroidRef.current && 'rotation' in asteroidRef.current) {
+      // Asteroide: igual que antes
+      if (
+        "position" in asteroidRef.current &&
+        "rotation" in asteroidRef.current
+      ) {
         tl.to(
           asteroidRef.current.position,
           {
@@ -198,15 +231,15 @@ export const SpaceAnimation = () => {
           },
           "<",
         )
-        // Asteroide: rota más rápido
-        .to(
-          asteroidRef.current.rotation,
-          {
-            y: Math.PI * 4,
-            x: Math.PI * 2,
-          },
-          "<",
-        );
+          // Asteroide: rota más rápido
+          .to(
+            asteroidRef.current.rotation,
+            {
+              y: Math.PI * 4,
+              x: Math.PI * 2,
+            },
+            "<",
+          );
       }
     }
 
