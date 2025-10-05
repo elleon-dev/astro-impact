@@ -15,5 +15,8 @@
     "deploy:indexes": "firebase deploy --only firestore:indexes",
     "deploy:extensions": "firebase deploy --only extensions",
     "export:extensions": "firebase ext:export"
+  },
+  "devDependencies": {
+    "@types/three": "^0.180.0"
   }
 }
