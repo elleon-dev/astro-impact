@@ -15,7 +15,7 @@ const Home = () => {
     <>
       <BannerAnimation />
       <div className="fixed flex flex-col items-center justify-between w-full h-screen">
-        <header className="flex justify-between w-full p-16">
+        <header className="flex justify-between w-full px-16 py-10">
           <img
             src="/logo.svg"
             alt="main-logo"
@@ -26,17 +26,16 @@ const Home = () => {
           <SquareMenu className="size-12 h-full" />
         </header>
       </div>
+      <Button
+        onClick={handleStartSimulation}
+        size="lg"
+        className="fixed bottom-8 left-1/2 -translate-x-1/2 gap-2 shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 text-sm sm:text-base z-50 "
+      >
+        <Rocket className="w-4 h-4 sm:w-5 sm:h-5" />
+        Iniciar Simulación
+      </Button>
       <div className="w-full h-screen"></div>
-      <div className="min-h-screen bg-background flex items-center justify-center p-4 sm:p-6">
-        <Button
-          onClick={handleStartSimulation}
-          size="lg"
-          className="w-full gap-2 shadow-lg hover:shadow-xl transition-all duration-300 text-sm sm:text-base"
-        >
-          <Rocket className="w-4 h-4 sm:w-5 sm:h-5" />
-          Iniciar Simulación
-        </Button>
-      </div>
+      <div className="min-h-screen bg-background flex items-center justify-center p-4 sm:p-6"></div>
     </>
   );
 };
