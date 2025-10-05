@@ -70,7 +70,7 @@ const Simulator = () => {
             <div className="flex items-center gap-3">
               <Rocket className="w-6 h-6 text-primary" />
               <h1 className="text-lg font-bold text-white">
-                Simulador de Impacto
+                AstroImpact
               </h1>
               <Input 
                 placeholder="Tu nombre" 
