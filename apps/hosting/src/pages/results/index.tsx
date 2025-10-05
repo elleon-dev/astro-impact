@@ -36,6 +36,8 @@ export const ResultsPage = () => {
   const [currentPhase, setCurrentPhase] = useState<Phase>("3d");
   const [isPlaying, setIsPlaying] = useState(true);
 
+  console.log("simData: ", simData);
+
   useEffect(() => {
     if (!isPlaying || currentPhase === "results") return;
 
