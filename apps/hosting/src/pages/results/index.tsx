@@ -36,8 +36,6 @@ export const ResultsPage = () => {
   const [currentPhase, setCurrentPhase] = useState<Phase>("3d");
   const [isPlaying, setIsPlaying] = useState(true);
 
-  console.log("simData: ", simData);
-
   useEffect(() => {
     if (!isPlaying || currentPhase === "results") return;
 
@@ -231,7 +229,12 @@ export const ResultsPage = () => {
             onComplete={() => isPlaying && setCurrentPhase("video")}
           />
         )}
-        {currentPhase === "video" && <ImpactVideo simData={simData} />}
+        {currentPhase === "video" && (
+          <ImpactVideo
+            simData={simData}
+            handlePhaseChange={handlePhaseChange}
+          />
+        )}
         {currentPhase === "results" && (
           <div
             className={twMerge(
