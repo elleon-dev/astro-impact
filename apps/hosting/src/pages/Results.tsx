@@ -1,13 +1,26 @@
-import { useLocation } from "react-router-dom";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { useState, useEffect } from "react";
-import { Share2, Facebook, Twitter, Linkedin, Link2, Rocket, AlertTriangle, MapPin, Users, Building2, Play, Pause, RotateCcw } from "lucide-react";
-import { ImpactVideo } from "@/components/ImpactVideo";
-import { Impact3DModel } from "@/components/Impact3DModel";
-import { toast } from "sonner";
+import {useLocation} from "react-router-dom";
+import {Button} from "@/components/ui/button";
+import {Input} from "@/components/ui/input";
+import {Label} from "@/components/ui/label";
+import {useEffect, useState} from "react";
+import {
+    AlertTriangle,
+    Building2,
+    Facebook,
+    Link2,
+    Linkedin,
+    MapPin,
+    Pause,
+    Play,
+    Rocket,
+    RotateCcw,
+    Share2,
+    Twitter,
+    Users
+} from "lucide-react";
+import {ImpactVideo} from "@/components/ImpactVideo";
+import {Impact3DModel} from "@/components/Impact3DModel";
+import {toast} from "sonner";
 
 type Phase = "3d" | "video" | "results";
 
@@ -19,7 +32,6 @@ const Results = () => {
   const [currentPhase, setCurrentPhase] = useState<Phase>("3d");
   const [isPlaying, setIsPlaying] = useState(true);
 
-  // Secuencia automática de fases
   useEffect(() => {
     if (!isPlaying || currentPhase === "results") return;
 
