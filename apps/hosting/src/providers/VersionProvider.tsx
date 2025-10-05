@@ -3,6 +3,7 @@ import { useDocumentData } from "react-firebase-hooks/firestore";
 import { firestore, version } from "@/firebase";
 import { LoaderCircle } from "lucide-react";
 import { Button } from "@/components/ui/button.tsx";
+import { Loader } from "@/components/ui/loader.tsx";
 import { settingsRef } from "@/firebase/collections";
 
 interface Context {
@@ -24,8 +25,7 @@ export const VersionProvider = ({ children }: Props) => {
 
   const onClickRefresh = () => document.location.reload();
 
-  if (settingDefaultLoading)
-    return <LoaderCircle height="100vh" className="animate-spin" />;
+  if (settingDefaultLoading) return <Loader />;
 
   if (settingDefaultError)
     return (
