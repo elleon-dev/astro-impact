@@ -80,3 +80,11 @@ All colors MUST be HSL.
     @apply bg-background text-foreground;
   }
 }
+
+@font-face {
+  font-family: "Venus Rising";
+  src: url("/fonts/venus-rising-rg.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}

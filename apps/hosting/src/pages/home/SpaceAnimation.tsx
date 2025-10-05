@@ -1,12 +1,15 @@
 import React, { useEffect, useRef } from "react";
-import * as THREE from "three/webgpu";
+import * as THREE from "three";
+import { Object3D } from "three";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Object3D } from "three";
 // @ts-ignore
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
+interface Props {
+  setLoading: (loading: boolean) => void;
+}
 
-export const SpaceAnimation = () => {
+export const SpaceAnimation = ({ setLoading }: Props) => {
   const mountRef = useRef<HTMLDivElement | null>(null);
   const asteroidRef = useRef<Object3D | null>(null);
   const earthRef = useRef<THREE.Mesh | null>(null);
@@ -16,6 +19,26 @@ export const SpaceAnimation = () => {
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
 
+    // 1. Crear el manager ANTES de cualquier loader
+    const manager = new THREE.LoadingManager();
+    manager.onLoad = () => {
+      setLoading(false);
+      if (mountRef.current && renderer) {
+        mountRef.current.appendChild(renderer.domElement);
+        animate();
+      }
+      console.log("Recursos cargados correctamente");
+    };
+    manager.onError = (url) => {
+      setLoading(false);
+      console.error(`Error cargando ${url}`);
+    };
+
+    // 2. Crear loaders con el manager
+    const textureLoader = new THREE.TextureLoader(manager);
+    const gltfLoader = new GLTFLoader(manager);
+
+    // 3. Cargar recursos (texturas y modelos)
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(
       50,
@@ -26,17 +49,27 @@ export const SpaceAnimation = () => {
     camera.position.set(0, 0, 5);
     camera.lookAt(0, 0, 0);
 
+    // Inicializar el renderer aquí, pero NO montar el canvas aún
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
-    if (mountRef.current) {
-      mountRef.current.appendChild(renderer.domElement);
-    }
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
-    const sun = new THREE.DirectionalLight("#ffffff", 2);
-    sun.position.set(0, 0, 3);
-    scene.add(sun);
+    // Fondo de estrellas para la escena
+    scene.background = textureLoader.load("/textures/background/stars.jpg");
 
-    const textureLoader = new THREE.TextureLoader();
+    // Plano negro semitransparente para oscurecer el fondo
+    const darkPlaneGeometry = new THREE.PlaneGeometry(2000, 2000);
+    const darkPlaneMaterial = new THREE.MeshBasicMaterial({
+      color: 0x000000,
+      transparent: true,
+      opacity: 0.7,
+      depthWrite: false,
+    });
+    const darkPlane = new THREE.Mesh(darkPlaneGeometry, darkPlaneMaterial);
+    darkPlane.position.set(0, 0, -900);
+    scene.add(darkPlane);
+
     const earthDay = textureLoader.load("/textures/planet/8k_earth_daymap.jpg");
     const earthNight = textureLoader.load(
       "/textures/planet/8k_earth_nightmap.jpg",
@@ -45,7 +78,7 @@ export const SpaceAnimation = () => {
       "/textures/planet/earth_bump_roughness_clouds_4096.jpg",
     );
     const earthNormal = textureLoader.load(
-      "/textures/planet/8k_earth_normal_map.tif",
+      "/textures/planet/8k_earth_normal_map.jpg",
     );
     const earthClouds = textureLoader.load(
       "/textures/planet/8k_earth_clouds.jpg",
@@ -53,9 +86,11 @@ export const SpaceAnimation = () => {
     const earthLights = textureLoader.load(
       "/textures/planet/earth_lights_2048.png",
     );
-
     const earthSpecular = textureLoader.load(
-      "/textures/planet/8k_earth_specular_map.tif",
+      "/textures/planet/8k_earth_specular_map.jpg",
+    );
+    const atmosphereTexture = textureLoader.load(
+      "/textures/planet/earth_atmos_2048.jpg",
     );
 
     const earthMaterial = new THREE.MeshStandardMaterial({
@@ -63,21 +98,21 @@ export const SpaceAnimation = () => {
       bumpMap: earthBump,
       bumpScale: 0.08,
       normalMap: earthNormal,
-      roughness: earthClouds,
+      metalnessMap: earthClouds,
       metalness: 0.1,
       emissive: new THREE.Color(0x222244),
       emissiveMap: earthNight,
       emissiveIntensity: 0.7,
-      specularMap: earthSpecular,
     });
 
     const geometry = new THREE.SphereGeometry(3, 128, 128);
     const earth = new THREE.Mesh(geometry, earthMaterial);
     earth.position.set(0, -2.5, 0);
+    earth.castShadow = false;
+    earth.receiveShadow = true;
     scene.add(earth);
     earthRef.current = earth;
 
-    // Capa de nubes (opcional, visual extra)
     const cloudsGeometry = new THREE.SphereGeometry(3.03, 128, 128);
     const cloudsMaterial = new THREE.MeshPhongMaterial({
       map: earthClouds,
@@ -91,14 +126,10 @@ export const SpaceAnimation = () => {
     cloudsRef.current = clouds;
     scene.add(clouds);
 
-    // Atmósfera (más difuminada y con textura)
-    const atmosphereTexture = textureLoader.load(
-      "/textures/planet/earth_atmos_2048.jpg",
-    );
-    const atmosphereGeometry = new THREE.SphereGeometry(0.5, 128, 128); // un poco más grande
+    const atmosphereGeometry = new THREE.SphereGeometry(0.5, 128, 128);
     const atmosphereMaterial = new THREE.MeshPhongMaterial({
       map: atmosphereTexture,
-      color: 0x3399ff,
+      color: 0x000000,
       transparent: true,
       opacity: 0.07,
       side: THREE.DoubleSide,
@@ -110,42 +141,16 @@ export const SpaceAnimation = () => {
     atmosphereRef.current = atmosphere;
     scene.add(atmosphere);
 
-    // Asteroide
-    const baseColor = textureLoader.load(
-      "/textures/asteroid/textures/material_0_baseColor.png",
-    );
-    const normalMap = textureLoader.load(
-      "/textures/asteroid/textures/material_0_normal.png",
-    );
-    const metallicRoughness = textureLoader.load(
-      "/textures/asteroid/textures/material_0_metallicRoughness.png",
-    );
-
-    const loader = new GLTFLoader();
     let asteroid: Object3D | null = null;
-    loader.load(
-      "/textures/asteroid/scene.gltf",
+    gltfLoader.load(
+      "/textures/asteroid/ceres/asteroid_ceres.glb",
       (gltf) => {
         asteroid = gltf.scene;
         asteroid.scale.set(1, 1, 1);
-        // Posición inicial: al fondo, arriba a la derecha
-        asteroid.position.set(0, 30, -100);
+        asteroid.position.set(3, 0, -60);
         asteroid.rotation.set(0, 0, 0);
-        asteroid.traverse((child: any) => {
-          if (child.isMesh) {
-            child.material = new THREE.MeshStandardMaterial({
-              map: baseColor,
-              normalMap: normalMap,
-              metalnessMap: metallicRoughness,
-              roughnessMap: metallicRoughness,
-              metalness: 1.0,
-              roughness: 1.0,
-            });
-          }
-        });
         scene.add(asteroid);
         asteroidRef.current = asteroid;
-        // Inicia animaciones GSAP cuando el asteroide está cargado
         setupGSAP();
       },
       undefined,
@@ -154,17 +159,14 @@ export const SpaceAnimation = () => {
       },
     );
 
-    // Luces para el asteroide
     const ambientLight = new THREE.AmbientLight(0xffffff, 1.2);
     scene.add(ambientLight);
     const directionalLight = new THREE.DirectionalLight(0xffffff, 2);
     directionalLight.position.set(5, 5, 5);
     scene.add(directionalLight);
 
-    // Animación
     let frameId: number;
     const animate = () => {
-      // Sincroniza posición y rotación de nubes y atmósfera con la tierra
       if (earthRef.current) {
         if (cloudsRef.current) {
           cloudsRef.current.position.copy(earthRef.current.position);
@@ -174,24 +176,12 @@ export const SpaceAnimation = () => {
           atmosphereRef.current.position.copy(earthRef.current.position);
           atmosphereRef.current.rotation.copy(earthRef.current.rotation);
         }
-        // Rotación continua de la tierra
         earthRef.current.rotation.y += 0.00005;
-      }
-      // Animación simple de rotación del asteroide
-      if (
-        asteroidRef.current &&
-        "rotation" in asteroidRef.current &&
-        asteroidRef.current.rotation
-      ) {
-        asteroidRef.current.rotation.y += 0.01;
-        asteroidRef.current.rotation.x += 0.005;
       }
       renderer.render(scene, camera);
       frameId = requestAnimationFrame(animate);
     };
-    animate();
 
-    // GSAP para scroll y animaciones sincronizadas
     function setupGSAP() {
       if (!earthRef.current || !asteroidRef.current) return;
       const tl = gsap.timeline({
@@ -199,10 +189,9 @@ export const SpaceAnimation = () => {
           trigger: "#banner-key",
           start: "top top",
           end: "+=3000",
-          scrub: 10,
+          scrub: 3,
         },
       });
-      // Tierra, nubes y atmósfera: SIEMPRE sincronizadas
       if (
         earthRef.current &&
         cloudsRef.current &&
@@ -217,7 +206,6 @@ export const SpaceAnimation = () => {
           .to(atmosphereRef.current.position, { x: 0, y: -4, z: 4 }, "<")
           .to(atmosphereRef.current.rotation, { y: Math.PI * 0.2 }, "<");
       }
-      // Asteroide: igual que antes
       if (
         "position" in asteroidRef.current &&
         "rotation" in asteroidRef.current
@@ -225,21 +213,19 @@ export const SpaceAnimation = () => {
         tl.to(
           asteroidRef.current.position,
           {
-            x: 0, // lado opuesto
-            y: -5, // baja
-            z: 5, // se acerca
+            x: 2,
+            y: 0,
+            z: 10,
           },
           "<",
-        )
-          // Asteroide: rota más rápido
-          .to(
-            asteroidRef.current.rotation,
-            {
-              y: Math.PI * 4,
-              x: Math.PI * 2,
-            },
-            "<",
-          );
+        ).to(
+          asteroidRef.current.rotation,
+          {
+            y: Math.PI * 0.5,
+            x: Math.PI * 0.2,
+          },
+          "<",
+        );
       }
     }
 
