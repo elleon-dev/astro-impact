@@ -137,7 +137,7 @@ export const BannerAnimation = () => {
           className="scale-125 absolute max-w-7xl object-cover mt-10 "
         />
         <SpaceAnimation setLoading={setLoading} />
-        {loading && <Loader text="Cargando..." />}
+        {loading && <Loader text="Loading..." />}
       </section>
 
       <section
@@ -148,7 +148,7 @@ export const BannerAnimation = () => {
           id="you-know"
           className="w-full h-screen grid place-items-center font-venus text-6xl text-primary text-center"
         >
-          ¿CÓMO SERÍA EL CHOQUE DE UN ASTEROIDE CON LA TIERRA?
+          WHAT WOULD AN ASTEROID COLLISION WITH EARTH LOOK LIKE?
         </span>
       </section>
       <section
@@ -163,7 +163,7 @@ export const BannerAnimation = () => {
           id="asteroids-text"
           className="relative text-6xl text-primary font-venus opacity-0 text-center max-w-6xl "
         >
-          SIMULA EL IMPACTO DE ESTOS ASTEROIDES
+          SIMULATE THE IMPACT OF THESE ASTEROIDS
         </span>
       </section>
 
@@ -174,11 +174,11 @@ export const BannerAnimation = () => {
         {/* Columna izquierda: texto */}
         <div className=" w-1/2 h-full flex flex-col items-center justify-center gap-6 bg-black px-12">
           <h2 className="text-4xl text-primary font-venus text-center">
-            VISUALIZA EL IMPACTO DE TU ASTEROIDE Y COMPRUÉBALO TÚ MISMO
+            VISUALIZE THE IMPACT OF YOUR ASTEROID AND SEE FOR YOURSELF
           </h2>
           <p className="text-xs text-primary font-venus text-center max-w-md">
-            ESTA APLICACIÓN HA SIDO DESARROLLADA CON FINES EDUCATIVOS Y NO
-            PRETENDE SUPLANTAR INFORMACIÓN DE LA NASA.
+            THIS APPLICATION HAS BEEN DEVELOPED FOR EDUCATIONAL PURPOSES AND IS
+            NOT INTENDED TO REPLACE INFORMATION FROM NASA.
           </p>
           <Button
             onClick={handleStartSimulation}
@@ -186,7 +186,7 @@ export const BannerAnimation = () => {
             className="cursor-pointer hover:scale-110 transition-all duration-300 relative z-20"
           >
             <Rocket className="w-4 h-4 sm:w-5 sm:h-5" />
-            Iniciar Simulación
+            Start Simulation
           </Button>
 
           {/* Overlay difuminado (borde derecho) */}
