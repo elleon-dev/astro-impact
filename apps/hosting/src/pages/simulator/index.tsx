@@ -91,9 +91,42 @@ export const SimulatorPage = () => {
   };
 
   const calculateImpactEnergy = () => {
-    const mass = (4 / 3) * Math.PI * Math.pow(simData.diameter / 2, 3) * 2500;
-    const energy = 0.5 * mass * Math.pow(simData.velocity * 1000, 2);
-    return (energy / 4.184e15).toFixed(2);
+    // Get density based on composition
+    const getDensity = (composition: string) => {
+      switch (composition) {
+        case "iron":
+          return 7800; // kg/m³
+        case "ice":
+          return 917; // kg/m³
+        case "stone":
+          return 2500; // kg/m³
+        case "mixed":
+          return 3000; // kg/m³
+        default:
+          return 2500;
+      }
+    };
+
+    const density = getDensity(simData.composition);
+    const radius = simData.diameter / 2; // meters
+    const volume = (4 / 3) * Math.PI * Math.pow(radius, 3); // m³
+    const mass = volume * density; // kg
+    const velocityMs = simData.velocity * 1000; // convert km/s to m/s
+    const kineticEnergy = 0.5 * mass * Math.pow(velocityMs, 2); // joules
+
+    // Convert to megatons TNT (1 megaton = 4.184 × 10^15 joules)
+    const energyMegatons = kineticEnergy / 4.184e15;
+
+    // Return with appropriate precision based on size
+    if (energyMegatons < 0.001) {
+      return energyMegatons.toExponential(2);
+    } else if (energyMegatons < 1) {
+      return energyMegatons.toFixed(4);
+    } else if (energyMegatons < 1000) {
+      return energyMegatons.toFixed(2);
+    } else {
+      return energyMegatons.toExponential(2);
+    }
   };
 
   const calculateCraterDiameter = () => {
@@ -106,22 +139,37 @@ export const SimulatorPage = () => {
 
   const getComparison = () => {
     const energy = parseFloat(calculateImpactEnergy());
+    if (energy < 0.01)
+      return {
+        event: "Small Building Explosion",
+        equivalent: "~0.01 megatons - local damage",
+      };
+    if (energy < 0.1)
+      return {
+        event: "City Block Destruction",
+        equivalent: "~0.1 megatons - several blocks",
+      };
     if (energy < 1)
       return {
-        event: "Building Explosion",
-        equivalent: "~0.5 megatons",
+        event: "Small Nuclear Bomb",
+        equivalent: "~1 megaton - city district",
       };
-    if (energy < 10)
+    if (energy < 15)
       return {
         event: "Tunguska Event (1908)",
         equivalent: "~15 megatons - devastated 2,000 km²",
       };
     if (energy < 100)
       return {
-        event: "Tsar Bomba",
-        equivalent: "~50 megatons - most powerful detonated",
+        event: "Large Nuclear Bomb",
+        equivalent: "~50-100 megatons - major city destruction",
       };
-    if (energy < 1000)
+    if (energy < 10000)
+      return {
+        event: "Regional Catastrophe",
+        equivalent: "~1,000-10,000 megatons - country-sized impact",
+      };
+    if (energy < 100000000)
       return {
         event: "Chicxulub Impact",
         equivalent: "~100 million megatons - dinosaur extinction",
@@ -603,7 +651,7 @@ export const SimulatorPage = () => {
                   stroke="currentColor"
                   viewBox="0 0 24 24"
                 >
-                  <circle cx="12" cy="12" r="10" strokeWidth={2} />
+                  <circle cx="12" cy="12" r="10" strokeWidth="2" />
                 </svg>
                 <div>
                   <p className="text-muted-foreground">Orbit Shape</p>
@@ -647,7 +695,7 @@ export const SimulatorPage = () => {
           </div>
         </Card>
 
-        {/* Footer - traducido */}
+        {/* Footer - translated */}
         <footer className="absolute bottom-0 left-0 right-0 z-50 backdrop-blur-md bg-gradient-to-t from-black/50 to-transparent">
           <div className="container mx-auto px-3 sm:px-6 py-3 sm:py-4">
             <div className="flex flex-col gap-3 sm:gap-4">

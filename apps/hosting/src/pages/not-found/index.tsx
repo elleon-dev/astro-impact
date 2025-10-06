@@ -8,7 +8,10 @@ export const NotFoundPage = () => {
   const location = useLocation();
 
   useEffect(() => {
-    console.error("404 Error: User attempted to access non-existent route:", location.pathname);
+    console.error(
+      "404 Error: User attempted to access non-existent route:",
+      location.pathname,
+    );
   }, [location.pathname]);
 
   return (
@@ -20,45 +23,46 @@ export const NotFoundPage = () => {
               <AlertTriangle className="w-12 h-12 sm:w-16 sm:h-16" />
             </div>
           </div>
-          
+
           <div className="space-y-2">
             <h1 className="text-6xl sm:text-7xl font-bold text-foreground mb-2">
               404
             </h1>
             <h2 className="text-xl sm:text-2xl font-semibold text-foreground">
-              Página No Encontrada
+              Page Not Found
             </h2>
             <p className="text-sm sm:text-base text-muted-foreground">
-              Lo sentimos, la página que buscas no existe o ha sido movida.
+              Sorry, the page you are looking for does not exist or has been
+              moved.
             </p>
           </div>
           <div className="text-xs sm:text-sm text-muted-foreground bg-muted/10 rounded-lg p-3 sm:p-4">
             <p className="font-mono break-all">
-              Ruta intentada: <span className="text-destructive">{location.pathname}</span>
+              Attempted route:{" "}
+              <span className="text-destructive">{location.pathname}</span>
             </p>
           </div>
         </div>
         <div className="space-y-3">
           <Button
-            onClick={() => window.location.href = "/"}
+            onClick={() => (window.location.href = "/")}
             size="lg"
             className="w-full gap-2 shadow-lg hover:shadow-xl transition-all duration-300 text-sm sm:text-base"
           >
             <Home className="w-4 h-4 sm:w-5 sm:h-5" />
-            Volver al Inicio
+            Back to Home
           </Button>
-          
+
           <Button
             onClick={() => window.history.back()}
             variant="outline"
             size="lg"
             className="w-full text-sm sm:text-base"
           >
-            Página Anterior
+            Previous Page
           </Button>
         </div>
       </Card>
     </div>
   );
 };
-
