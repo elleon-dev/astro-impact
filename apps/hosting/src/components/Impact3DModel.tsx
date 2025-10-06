@@ -66,10 +66,16 @@ const AsteroidModel = ({
 
   const getOptimalScale = () => {
     const diameter = simData.simulation?.diameter || 490;
-    if (diameter < 1000) return 0.3;
-    else if (diameter < 50000) return 0.2;
-    else if (diameter < 600000) return 0.1;
-    else return 0.05;
+
+    if (diameter < 1000) {
+      return 0.5;
+    } else if (diameter < 50000) {
+      return 0.3;
+    } else if (diameter < 600000) {
+      return 0.15;
+    } else {
+      return 0.1;
+    }
   };
 
   const scale = getOptimalScale();
