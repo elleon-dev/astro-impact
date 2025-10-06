@@ -1,4 +1,3 @@
-import { useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button.tsx";
 import { Input } from "@/components/ui/input.tsx";
 import { Label } from "@/components/ui/label.tsx";
@@ -6,16 +5,12 @@ import { useEffect, useState } from "react";
 import {
   AlertTriangle,
   Building2,
-  Facebook,
   Link2,
-  Linkedin,
   MapPin,
   Pause,
   Play,
   Rocket,
   RotateCcw,
-  Share2,
-  Twitter,
   Users,
 } from "lucide-react";
 import { ImpactVideo } from "@/components/ImpactVideo.tsx";
@@ -41,9 +36,8 @@ export const ResultsPage = () => {
     })();
   }, []);
 
-  const [userName, setUserName] = useState("");
   const [resultUrl] = useState(
-    `${currentConfig.hostingUrl}/result/${Math.random().toString(36).substr(2, 9)}`,
+    `${currentConfig.hostingUrl}/result?id=${simData?.id || id}`,
   );
   const [currentPhase, setCurrentPhase] = useState<Phase>("3d");
   const [isPlaying, setIsPlaying] = useState(true);
@@ -113,20 +107,54 @@ export const ResultsPage = () => {
   }
 
   const calculateImpactData = () => {
-    const diameter = simData.diameter;
-    const velocity = simData.velocity;
+    // Use pre-calculated impact data from simData if available
+    if (simData?.impact) {
+      return {
+        energyMegatons: (simData.impact.energy / 1e6).toFixed(2), // Convert to megatons
+        craterDiameter: (simData.impact.craterDiameter / 1000).toFixed(2), // Convert to km
+        affectedArea: (
+          Math.PI * Math.pow((simData.impact.craterDiameter / 1000) * 10, 2)
+        ).toFixed(0),
+        estimatedCasualties: simData.impact.comparison?.equivalent || "N/A",
+      };
+    }
 
+    // Fallback calculation if impact data is not available
+    const diameter = Number(simData?.simulation?.diameter) || 0;
+    const velocity = Number(simData?.simulation?.velocity) || 0;
+
+    // Return default values if diameter or velocity are invalid
+    if (diameter <= 0 || velocity <= 0) {
+      return {
+        energyMegatons: "0",
+        craterDiameter: "0",
+        affectedArea: "0",
+        estimatedCasualties: "N/A",
+      };
+    }
+
+    // Calculate mass (assuming spherical asteroid with density 2500 kg/m³)
     const mass = (4 / 3) * Math.PI * Math.pow(diameter / 2, 3) * 2500;
+
+    // Calculate kinetic energy
     const energy = 0.5 * mass * Math.pow(velocity * 1000, 2);
+
+    // Convert to megatons (1 megaton = 4.184e15 joules)
     const energyMegatons = (energy / 4.184e15).toFixed(2);
+
+    // Calculate crater diameter using scaling law
     const craterDiameter = (
       diameter *
       20 *
       Math.pow(velocity / 20, 0.44)
     ).toFixed(2);
+
+    // Calculate affected area (crater diameter * 10 for destruction radius)
     const affectedArea = (
       Math.PI * Math.pow(parseFloat(craterDiameter) * 10, 2)
     ).toFixed(0);
+
+    // Estimate casualties based on diameter
     const estimatedCasualties =
       diameter < 100
         ? "10,000 - 50,000"
@@ -145,7 +173,8 @@ export const ResultsPage = () => {
   const impactData = calculateImpactData();
 
   const shareOnSocial = (platform: string) => {
-    const text = `Acabo de simular un impacto de asteroide de ${simData.diameter}m! Energía: ${impactData.energyMegatons} megatones. ¡Mira los resultados!`;
+    const diameter = Number(simData?.simulation?.diameter) || 0;
+    const text = `Acabo de simular un impacto de asteroide de ${diameter}m! Energía: ${impactData.energyMegatons} megatones. ¡Mira los resultados!`;
     const url = encodeURIComponent(resultUrl);
     const encodedText = encodeURIComponent(text);
 
@@ -261,7 +290,9 @@ export const ResultsPage = () => {
                     <h1 className="text-[2em] font-bold mb-4 sm:mb-6 flex items-center gap-2 text-white">
                       Meteorito:{" "}
                       <span className="text-primary">
-                        {simData.meteor.name}
+                        {simData?.meteor?.name ||
+                          simData?.name ||
+                          "Desconocido"}
                       </span>
                     </h1>
                     <h3 className="text-lg sm:text-xl font-bold mb-4 sm:mb-6 flex items-center gap-2 text-white">
@@ -340,11 +371,14 @@ export const ResultsPage = () => {
                               Destrucción Infraestructura
                             </p>
                             <p className="text-lg sm:text-xl font-bold text-white">
-                              {simData.diameter < 100
-                                ? "Local"
-                                : simData.diameter < 500
-                                  ? "Regional"
-                                  : "Continental"}
+                              {(() => {
+                                const diameter = Number(simData?.simulation?.diameter) || 0;
+                                return diameter < 100000
+                                  ? "Local"
+                                  : diameter < 500000
+                                    ? "Regional"
+                                    : "Continental";
+                              })()}
                             </p>
                             <p className="text-xs text-white/50 mt-1">
                               Escala devastación
@@ -363,25 +397,25 @@ export const ResultsPage = () => {
                         <div className="flex flex-wrap">
                           <span className="text-white/60">Tipo:</span>
                           <span className="ml-2 font-medium text-white">
-                            {simData.asteroidType}
+                            {simData?.simulation?.asteroidType || simData?.simulation?.composition || "N/A"}
                           </span>
                         </div>
                         <div className="flex flex-wrap">
                           <span className="text-white/60">Diámetro:</span>
                           <span className="ml-2 font-medium text-white">
-                            {simData.diameter}m
+                            {(Number(simData?.simulation?.diameter) || 0).toLocaleString()}m
                           </span>
                         </div>
                         <div className="flex flex-wrap">
                           <span className="text-white/60">Velocidad:</span>
                           <span className="ml-2 font-medium text-white">
-                            {simData.velocity} km/s
+                            {Number(simData?.simulation?.velocity) || 0} km/s
                           </span>
                         </div>
                         <div className="flex flex-wrap">
                           <span className="text-white/60">Ángulo:</span>
                           <span className="ml-2 font-medium text-white">
-                            {simData.angle}°
+                            {Number(simData?.simulation?.angle) || 0}°
                           </span>
                         </div>
                       </div>
@@ -405,10 +439,10 @@ export const ResultsPage = () => {
                         </Label>
                         <Input
                           id="userName"
+                          disabled
                           placeholder="Ingresa tu nombre"
-                          value={userName}
-                          onChange={(e) => setUserName(e.target.value)}
-                          className="bg-black/30 border-white/10 text-white text-sm"
+                          value={simData?.userName || ""}
+                          className="bg-black/30 border-white/10 text-white capitalize"
                         />
                       </div>
 
@@ -430,49 +464,6 @@ export const ResultsPage = () => {
                             className="border-white/10 hover:bg-white/10 h-8 w-8 sm:h-10 sm:w-10"
                           >
                             <Link2 className="w-3 h-3 sm:w-4 sm:h-4" />
-                          </Button>
-                        </div>
-                      </div>
-
-                      {/* Social Share Buttons */}
-                      <div className="space-y-2">
-                        <Label className="text-xs sm:text-sm text-white/80">
-                          Compartir en Redes
-                        </Label>
-                        <div className="flex flex-col sm:flex-row gap-2">
-                          <div className="flex gap-2">
-                            <Button
-                              variant="outline"
-                              size="icon"
-                              onClick={() => shareOnSocial("facebook")}
-                              className="border-white/10 hover:bg-primary/20 hover:text-primary hover:border-primary/50 h-8 w-8 sm:h-10 sm:w-10"
-                            >
-                              <Facebook className="w-3 h-3 sm:w-4 sm:h-4" />
-                            </Button>
-                            <Button
-                              variant="outline"
-                              size="icon"
-                              onClick={() => shareOnSocial("twitter")}
-                              className="border-white/10 hover:bg-primary/20 hover:text-primary hover:border-primary/50 h-8 w-8 sm:h-10 sm:w-10"
-                            >
-                              <Twitter className="w-3 h-3 sm:w-4 sm:h-4" />
-                            </Button>
-                            <Button
-                              variant="outline"
-                              size="icon"
-                              onClick={() => shareOnSocial("linkedin")}
-                              className="border-white/10 hover:bg-primary/20 hover:text-primary hover:border-primary/50 h-8 w-8 sm:h-10 sm:w-10"
-                            >
-                              <Linkedin className="w-3 h-3 sm:w-4 sm:h-4" />
-                            </Button>
-                          </div>
-                          <Button
-                            variant="outline"
-                            className="flex-1 border-white/10 hover:bg-primary/20 hover:text-primary hover:border-primary/50 text-xs sm:text-sm"
-                            onClick={() => shareOnSocial("facebook")}
-                          >
-                            <Share2 className="w-3 h-3 sm:w-4 sm:h-4 mr-2" />
-                            Compartir
                           </Button>
                         </div>
                       </div>
@@ -498,7 +489,10 @@ export const ResultsPage = () => {
             >
               <div className="container mx-auto">
                 <h2 className="text-3xl font-bold text-white mb-8 text-center">
-                  Resultados del Impacto de {simData.name}
+                  Resultados del Impacto de{" "}
+                  {simData?.meteor?.name ||
+                    simData?.name ||
+                    "Asteroide Desconocido"}
                 </h2>
                 <div className="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto mb-12">
                   {/* Preview Modelo 3D */}
