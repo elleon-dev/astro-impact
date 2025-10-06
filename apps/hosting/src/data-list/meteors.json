@@ -79,7 +79,7 @@
     "images": {
       "full_view": "./images/asteroid-ceres-1.jpg",
       "surface": "./images/asteroid-ceres-2.jpg",
-      "view_from_space": "./images/asteroid-ceres-2.jpg"
+      "view_from_space": "./images/asteroid-ceres-3.jpg"
     }
   },
   {
@@ -170,7 +170,7 @@
     "images": {
       "full_view": "./images/asteroid-bennu-1.jpg",
       "surface": "./images/asteroid-bennu-2.jpg",
-      "view_from_space": "./images/asteroid-bennu-2.jpg"
+      "view_from_space": "./images/asteroid-bennu-3.jpg"
     }
   }
 ]

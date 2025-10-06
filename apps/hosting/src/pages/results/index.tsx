@@ -219,7 +219,6 @@ export const ResultsPage = () => {
           <div className="container mx-auto px-3 sm:px-4 py-3 sm:py-4">
             <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
               <div className="flex items-center gap-3">
-                <Rocket className="w-6 h-6 sm:w-8 sm:h-8 text-primary" />
                 <h1 className="text-xl sm:text-2xl font-bold text-white">
                   AstroImpact
                 </h1>
