@@ -21,12 +21,18 @@ import { twMerge } from "tailwind-merge";
 import { useQuery } from "@/hooks/useQuery.ts";
 import { fetchSimulation } from "@/firebase/collections";
 import { ScrollTop } from "@/ScrollTop.ts";
+import { useNavigate } from "react-router-dom";
 
 type Phase = "3d" | "video" | "results";
 
 export const ResultsPage = () => {
   const { id } = useQuery<{ id: string | undefined }>();
   const [simData, setSimData] = useState(undefined);
+  const navigate = useNavigate();
+  const handleStartSimulation = () => {
+    navigate("/start");
+    window.scrollTo(0, 0);
+  };
 
   useEffect(() => {
     (async () => {
@@ -481,7 +487,7 @@ export const ResultsPage = () => {
                     </div>
 
                     <Button
-                      onClick={() => (window.location.href = "/start")}
+                      onClick={() => handleStartSimulation()}
                       variant="default"
                       className="w-full border-white/10 hover:bg-white/10 text-sm sm:text-base"
                     >
