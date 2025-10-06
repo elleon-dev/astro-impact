@@ -10,13 +10,13 @@ interface LoaderProps {
 
 export const Loader = ({ size, color, text, textColor }: LoaderProps) => {
   return (
-    <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center bg-[rgba(0,0,0,0.9)] text-primary">
+    <div className="absolute top-0 left-0 w-full h-full flex flex-col justify-center items-center gap-2 bg-[rgba(0,0,0,0.9)] text-primary">
       <Commet
         size={size || "medium"}
         color={color || "#f25c05"}
-        text={text}
         textColor={textColor || "#f25c05"}
       />
+      {text && <p className="font-venus text-xs">{text}</p>}
     </div>
   );
 };

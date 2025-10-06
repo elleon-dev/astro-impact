@@ -1,14 +1,13 @@
 import { useNavigate } from "react-router-dom";
-import { Button } from "@/components/ui/button.tsx";
-import { Rocket, SquareMenu } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import React from "react";
 import { BannerAnimation } from "@/pages/home/BannerAnimation.tsx";
 
 const Home = () => {
   const navigate = useNavigate();
 
-  const handleStartSimulation = () => {
-    navigate("/start");
+  const startHome = () => {
+    window.scrollTo(0, 0);
   };
 
   return (
@@ -16,26 +15,18 @@ const Home = () => {
       <BannerAnimation />
       <div className="fixed flex flex-col items-center justify-between w-full h-screen">
         <header className="flex justify-between w-full px-16 py-10">
-          <img
-            src="/logo.svg"
-            alt="main-logo"
-            width={1000}
-            height={1000}
-            className="w-full h-full max-w-16 object-cover brightness-0 invert"
-          />
-          <SquareMenu className="size-12 h-full" />
+          <button onClick={startHome} className="pointer">
+            <img
+              src="/logo.svg"
+              alt="main-logo"
+              width={1000}
+              height={1000}
+              className="w-full h-full max-w-16 object-cover brightness-0 invert"
+            />
+          </button>
         </header>
       </div>
-      <Button
-        onClick={handleStartSimulation}
-        size="lg"
-        className="fixed bottom-8 left-1/2 -translate-x-1/2 gap-2 shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 text-sm sm:text-base z-50 "
-      >
-        <Rocket className="w-4 h-4 sm:w-5 sm:h-5" />
-        Iniciar Simulación
-      </Button>
-      <div className="w-full h-screen"></div>
-      <div className="min-h-screen bg-background flex items-center justify-center p-4 sm:p-6"></div>
+      <ChevronDown className="fixed size-20 bottom-8 left-1/2 -translate-x-1/2 gap-2 hover:scale-105 transition-all animate-bounce duration-900 z-50 " />
     </>
   );
 };
