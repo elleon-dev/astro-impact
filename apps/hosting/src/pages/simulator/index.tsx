@@ -142,16 +142,18 @@ export const SimulatorPage = () => {
     }
   };
 
-  const handleGenerateResult = () => {
-    navigate("/results", { state: { simData, userName } });
-  };
-
   const comparison = getComparison();
 
   const { assignCreateProps } = useDefaultFirestoreProps();
 
   const onSubmitSimulationData = async () => {
     const simulationId = getSimulationId();
+
+    const meteorOfDataList = meteors.find(
+      (meteor) => meteor.id === selectedMeteorId,
+    );
+
+    console.log("meteorOfDataList:", meteorOfDataList);
 
     const simulationData = {
       id: simulationId,
@@ -210,6 +212,12 @@ export const SimulatorPage = () => {
               },
             }
           : null,
+      videoUrl: meteorOfDataList?.videoUrl || null,
+      images: {
+        full_view: meteorOfDataList?.images?.full_view || null,
+        surface: meteorOfDataList?.images?.surface || null,
+        view_from_space: meteorOfDataList?.images?.view_from_space || null,
+      },
     };
 
     try {

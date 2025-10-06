@@ -1,16 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button.tsx";
 
-interface SimulationData {
-  asteroidType: string;
-  diameter: number;
-  velocity: number;
-  angle: number;
-  composition: string;
-}
-
 interface ImpactVideoProps {
-  simData: SimulationData;
+  simData: any;
   handlePhaseChange: (phase: string) => void;
 }
 
@@ -23,7 +15,7 @@ export const ImpactVideo = ({
     <div className="w-[100vw] h-[calc(100vh-13rem)] p-[3em] mt-[8rem] bg-gradient-to-b from-background via-background/90 to-background relative flex flex-col items-center justify-center">
       {/* Vesta Video */}
       <video
-        src="./videos/vesta.mp4"
+        src={simData.videoUrl}
         className="relative w-full min-h-[80svh] h-full object-cover rounded-xl shadow-lg border border-border z-0 flex items-center justify-center"
         autoPlay
         loop
@@ -42,23 +34,10 @@ export const ImpactVideo = ({
           {simData.velocity} km/s. El impacto generará una explosión
           catastrófica con efectos devastadores en la región de impacto.
         </p>
-        <div className="mt-3 md:mt-4 grid grid-cols-2 gap-2 md:gap-3 text-xs">
-          <div className="bg-white/5 p-2 rounded">
-            <span className="text-white/60">Tipo:</span>
-            <span className="ml-2 font-medium text-white">
-              {simData.asteroidType}
-            </span>
-          </div>
-          <div className="bg-white/5 p-2 rounded">
-            <span className="text-white/60">Ángulo:</span>
-            <span className="ml-2 font-medium text-white">
-              {simData.angle}°
-            </span>
-          </div>
-        </div>
         <br />
         <span className="font-medium text-[.8em]">
-          Video generado por AI, para brindar una mejor experiencia al usuario
+          Video generado por AI, para brindar una mejor experiencia de
+          entretenimiento al usuario
         </span>
       </div>
 

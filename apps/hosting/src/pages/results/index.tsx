@@ -23,14 +23,23 @@ import { Impact3DModel } from "@/components/Impact3DModel.tsx";
 import { toast } from "sonner";
 import { currentConfig } from "@/config";
 import { twMerge } from "tailwind-merge";
-import model3DPreview from "@/assets/3d-model-preview.jpg";
-import impactVideoPreview from "@/assets/impact-video-preview.jpg";
+import { useQuery } from "@/hooks/useQuery.ts";
+import { fetchSimulation } from "@/firebase/collections";
 
 type Phase = "3d" | "video" | "results";
 
 export const ResultsPage = () => {
-  const location = useLocation();
-  const { simData } = location.state || {};
+  const { id } = useQuery<{ id: string | undefined }>();
+  const [simData, setSimData] = useState(undefined);
+
+  useEffect(() => {
+    (async () => {
+      const simulationData = await fetchSimulation(id);
+      console.log("simulationData: ", simulationData);
+      setSimData(simulationData);
+    })();
+  }, []);
+
   const [userName, setUserName] = useState("");
   const [resultUrl] = useState(
     `${currentConfig.hostingUrl}/result/${Math.random().toString(36).substr(2, 9)}`,
@@ -155,6 +164,8 @@ export const ResultsPage = () => {
     toast.success("¡Link copiado al portapapeles!");
   };
 
+  console.log("simData: ", simData);
+
   return (
     <div className="min-h-screen bg-background flex flex-col">
       {/* Header */}
@@ -245,6 +256,10 @@ export const ResultsPage = () => {
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
                 {/* Impact Details */}
                 <div className="lg:col-span-2">
+                  <h1 className="text-[2em] font-bold mb-4 sm:mb-6 flex items-center gap-2 text-white">
+                    Meteorito:{" "}
+                    <span className="text-primary">{simData.meteor.name}</span>
+                  </h1>
                   <h3 className="text-lg sm:text-xl font-bold mb-4 sm:mb-6 flex items-center gap-2 text-white">
                     <AlertTriangle className="w-5 h-5 sm:w-6 sm:h-6 text-destructive" />
                     Detalles del Impacto
@@ -479,7 +494,7 @@ export const ResultsPage = () => {
           >
             <div className="container mx-auto">
               <h2 className="text-3xl font-bold text-white mb-8 text-center">
-                Visualizaciones del Impacto
+                Resultados del Impacto de {simData.name}
               </h2>
               <div className="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto mb-12">
                 {/* Preview Modelo 3D */}
@@ -491,7 +506,7 @@ export const ResultsPage = () => {
                   <div className="relative z-10">
                     <div className="w-full h-48 rounded-lg mb-4 overflow-hidden">
                       <img
-                        src={model3DPreview}
+                        src="./images/3d-model-preview.jpg"
                         alt="Modelo 3D del asteroide"
                         className="w-full h-full object-cover"
                       />
@@ -521,8 +536,8 @@ export const ResultsPage = () => {
                   <div className="relative z-10">
                     <div className="w-full h-48 rounded-lg mb-4 overflow-hidden">
                       <img
-                        src={impactVideoPreview}
-                        alt="Simulación de impacto"
+                        src="./images/impact-video-preview.jpg"
+                        alt="Video de impacto"
                         className="w-full h-full object-cover"
                       />
                     </div>
@@ -541,6 +556,52 @@ export const ResultsPage = () => {
                     </div>
                   </div>
                 </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Formas Reales del Asteroide */}
+          <div className="max-w-5xl mx-auto mt-8">
+            <h3 className="text-2xl font-bold text-white mb-6 text-center">
+              Formas Reales del Asteroide{" "}
+              <span className="text-primary">{simData?.meteor?.name}</span>
+            </h3>
+            <div className="grid md:grid-cols-3 gap-6">
+              <div className="rounded-xl overflow-hidden bg-gradient-to-br from-black/60 to-transparent backdrop-blur-sm border border-white/10 hover:border-primary/30 transition-all">
+                <img
+                  src={simData?.images?.full_view}
+                  alt="Asteroide Vesta vista 1"
+                  className="w-full h-48 object-cover"
+                />
+                <div className="p-4">
+                  <p className="text-white/80 text-sm">
+                    Vista completa del asteroide {simData?.meteor?.name}
+                  </p>
+                </div>
+              </div>
+              <div className="rounded-xl overflow-hidden bg-gradient-to-br from-black/60 to-transparent backdrop-blur-sm border border-white/10 hover:border-primary/30 transition-all">
+                <img
+                  src={simData?.images?.surface}
+                  alt="Asteroide Vesta vista 2"
+                  className="w-full h-48 object-cover"
+                />
+                <div className="p-4">
+                  <p className="text-white/80 text-sm">
+                    Detalle de la superficie con cráteres
+                  </p>
+                </div>
+              </div>
+              <div className="rounded-xl overflow-hidden bg-gradient-to-br from-black/60 to-transparent backdrop-blur-sm border border-white/10 hover:border-primary/30 transition-all">
+                <img
+                  src={simData?.images?.view_from_space}
+                  alt="Asteroide Vesta vista 3"
+                  className="w-full h-48 object-cover"
+                />
+                <div className="p-4">
+                  <p className="text-white/80 text-sm">
+                    Vista completa desde el espacio
+                  </p>
+                </div>
               </div>
             </div>
           </div>

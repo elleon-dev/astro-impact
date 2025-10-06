@@ -35,7 +35,7 @@
         "estimated_diameter_max": 1276556.3161953325
       },
       "miles": {
-        "estimated_diameter_min": 354.7365655840,
+        "estimated_diameter_min": 354.736565584,
         "estimated_diameter_max": 793.2150747506
       },
       "feet": {
@@ -74,6 +74,12 @@
       "orbit_class_type": "",
       "orbit_class_description": "",
       "orbit_class_range": ""
+    },
+    "videoUrl": "./videos/ceres.mp4",
+    "images": {
+      "full_view": "./images/asteroid-ceres-1.jpg",
+      "surface": "./images/asteroid-ceres-2.jpg",
+      "view_from_space": "./images/asteroid-ceres-2.jpg"
     }
   },
   {
@@ -159,6 +165,12 @@
       "orbit_class_type": "APO",
       "orbit_class_description": "Near-Earth asteroid orbits which cross the Earth's orbit similar to that of 1862 Apollo",
       "orbit_class_range": "a > 1.0 AU; q < 1.017 AU"
+    },
+    "videoUrl": "./videos/bennu.mp4",
+    "images": {
+      "full_view": "./images/asteroid-bennu-1.jpg",
+      "surface": "./images/asteroid-bennu-2.jpg",
+      "view_from_space": "./images/asteroid-bennu-2.jpg"
     }
   }
 ]
