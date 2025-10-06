@@ -13,16 +13,7 @@ import {
 } from "@/components/ui/select.tsx";
 import { Slider } from "@/components/ui/slider.tsx";
 import { AsteroidScene } from "@/components/AsteroidScene.tsx";
-import {
-  Flame,
-  MapPin,
-  Palette,
-  Rocket,
-  Ruler,
-  Target,
-  User,
-  Zap,
-} from "lucide-react";
+import { Flame, MapPin, Palette, Ruler, Target, User, Zap } from "lucide-react";
 import meteors from "../../data-list/meteors.json";
 import { addSimulation, getSimulationId } from "@/firebase/collections";
 import { useDefaultFirestoreProps } from "@/hooks/useDefaultFirestoreProps.ts";
@@ -75,6 +66,8 @@ export const SimulatorPage = () => {
   }, [selectedMeteorId]);
 
   const handleSliderChange = (field: keyof SimulationData, value: number) => {
+    if (!isCustom) return; // Block changes if not in custom mode
+
     setSimData((prev) => ({ ...prev, [field]: value }));
     if (selectedMeteorId !== "custom") {
       setSelectedMeteorId("custom");
@@ -83,6 +76,8 @@ export const SimulatorPage = () => {
   };
 
   const handleCompositionChange = (value: string) => {
+    if (!isCustom) return; // Block changes if not in custom mode
+
     setSimData((prev) => ({ ...prev, composition: value }));
     if (selectedMeteorId !== "custom") {
       setSelectedMeteorId("custom");
@@ -196,6 +191,12 @@ export const SimulatorPage = () => {
   const { assignCreateProps } = useDefaultFirestoreProps();
 
   const onSubmitSimulationData = async () => {
+    // Validate that user has entered their name
+    if (!userName.trim()) {
+      alert("Please enter your name before generating the simulation results.");
+      return;
+    }
+
     const simulationId = getSimulationId();
 
     const meteorOfDataList = meteors.find(
@@ -299,7 +300,6 @@ export const SimulatorPage = () => {
             <div className="flex items-center gap-6">
               {/* Logo */}
               <div className="flex items-center gap-2 flex-shrink-0">
-                <Rocket className="w-6 h-6 text-primary" />
                 <h1 className="text-lg font-bold text-white whitespace-nowrap">
                   AstroImpact
                 </h1>
@@ -353,8 +353,11 @@ export const SimulatorPage = () => {
                   <Select
                     value={simData.composition}
                     onValueChange={handleCompositionChange}
+                    disabled={!isCustom}
                   >
-                    <SelectTrigger className="h-9 bg-black/30 backdrop-blur-sm text-white border-white/20 text-sm">
+                    <SelectTrigger
+                      className={`h-9 bg-black/30 backdrop-blur-sm text-white border-white/20 text-sm ${!isCustom ? "opacity-50 cursor-not-allowed" : ""}`}
+                    >
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -388,7 +391,8 @@ export const SimulatorPage = () => {
                         min={10}
                         max={1000}
                         step={10}
-                        className="flex-1"
+                        className={`flex-1 ${!isCustom ? "opacity-50 pointer-events-none" : ""}`}
+                        disabled={!isCustom}
                       />
                     </div>
                   </div>
@@ -413,7 +417,8 @@ export const SimulatorPage = () => {
                         min={11}
                         max={72}
                         step={1}
-                        className="flex-1"
+                        className={`flex-1 ${!isCustom ? "opacity-50 pointer-events-none" : ""}`}
+                        disabled={!isCustom}
                       />
                     </div>
                   </div>
@@ -438,7 +443,8 @@ export const SimulatorPage = () => {
                         min={0}
                         max={90}
                         step={5}
-                        className="flex-1"
+                        className={`flex-1 ${!isCustom ? "opacity-50 pointer-events-none" : ""}`}
+                        disabled={!isCustom}
                       />
                     </div>
                   </div>
@@ -735,9 +741,8 @@ export const SimulatorPage = () => {
               <div className="flex justify-center">
                 <Button
                   onClick={onSubmitSimulationData}
-                  disabled={!isValid}
                   size="lg"
-                  className="gap-2 shadow-impact hover:shadow-glow transition-all duration-300 bg-primary/90 backdrop-blur w-full sm:w-auto disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="gap-2 shadow-impact hover:shadow-glow transition-all duration-300 bg-primary/90 backdrop-blur w-full sm:w-auto"
                 >
                   <Flame className="w-4 h-4 sm:w-5 sm:h-5" />
                   <span className="text-sm sm:text-base">Generate Result</span>
