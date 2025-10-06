@@ -27,21 +27,19 @@ export const ImpactVideo = ({
       {/* Overlay Text */}
       <div className="absolute top-0 left-4 md:left-20 bg-black/60 backdrop-blur-sm p-4 md:p-6 rounded-xl border border-white/10 max-w-sm md:max-w-md z-10">
         <h2 className="text-xl md:text-2xl font-bold mb-2 text-primary">
-          Secuencia de Impacto
+          Impact Sequence
         </h2>
         <p className="text-white/80 text-xs md:text-sm">
-          Asteroide de {simData.diameter}m aproximándose a la Tierra a{" "}
-          {simData.velocity} km/s. El impacto generará una explosión
-          catastrófica con efectos devastadores en la región de impacto.
+          Asteroid of {simData.diameter}m approaching Earth at{" "}
+          {simData.velocity} km/s. The impact will generate a catastrophic
+          explosion with devastating effects in the impact region.
         </p>
         <br />
         <span className="font-medium text-[.8em]">
-          Video generado por AI, para brindar una mejor experiencia de
-          entretenimiento al usuario
+          AI-generated video to provide a better entertainment experience for
+          the user
         </span>
       </div>
-
-      {/* Botón para continuar a los datos */}
       <div className="w-full flex justify-center absolute bottom-10 left-0 z-20">
         <Button
           variant="default"
@@ -49,7 +47,7 @@ export const ImpactVideo = ({
           onClick={() => handlePhaseChange("results")}
           className="px-8 py-3 text-lg font-semibold shadow-lg z-50 cursor-pointer"
         >
-          Siguiente
+          Next
         </Button>
       </div>
     </div>
